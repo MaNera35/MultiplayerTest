@@ -94,11 +94,12 @@ public class PlayerController : MonoBehaviour
             {
                 currentFuel = FuelAmount;
             }
-            fuel.DestroySelf();
+            
         }
 
             
     }
+
 
     private void SendStatsRPC()
     {

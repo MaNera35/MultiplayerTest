@@ -6,8 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private PlayerStatsItem playerStatsItemPrefab;
-    [SerializeField] private Transform holder;
-    [SerializeField] private List<PlayerStatsItem> playerStatsList = new();
+    [SerializeField] private Transform[] holder;
     
 
     private Dictionary<int, PlayerStatsItem> playerUI = new Dictionary<int, PlayerStatsItem>();
@@ -27,7 +26,7 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     private void CreatePlayerUI(Player player)
     {
-        PlayerStatsItem statsItem = Instantiate(playerStatsItemPrefab, holder);
+        PlayerStatsItem statsItem = Instantiate(playerStatsItemPrefab, holder[player.ActorNumber - 1]);
         statsItem.SetStats(player.NickName, "0", "0", 0f);
         playerUI.Add(player.ActorNumber, statsItem);
     }
