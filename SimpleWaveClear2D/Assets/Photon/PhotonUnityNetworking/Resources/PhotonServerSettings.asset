@@ -42,6 +42,10 @@ MonoBehaviour:
   - SetPlayerName
   - UpdateStatsRPC
   - DestroyFuelRPC
+  - RPC_PlayEffect
+  - RPC_PlayCrashEffect
+  - RPC_NextLevel
+  - RPC_RestartLevel
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

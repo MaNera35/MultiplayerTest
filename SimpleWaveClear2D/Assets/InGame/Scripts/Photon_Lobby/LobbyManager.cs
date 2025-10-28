@@ -84,7 +84,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel("Game");
+        if(PhotonNetwork.CurrentRoom.PlayerCount >= 1)
+        {
+            PhotonNetwork.LoadLevel("Game");
+        }
     }
 
     // ===============================

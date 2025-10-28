@@ -47,6 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a324da2fa7998c249bafa10c53f5808b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fuel
+  popupDuration: 0.2
+  scaleMultiplier: 1.21
+  fadeDuration: 0.3
+  spriteRenderer: {fileID: 6765611626124660617}
 --- !u!61 &5503093541683243723
 BoxCollider2D:
   m_ObjectHideFlags: 0
