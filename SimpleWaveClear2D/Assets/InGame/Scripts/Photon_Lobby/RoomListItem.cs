@@ -5,6 +5,7 @@ public class RoomListItem : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI roomNameText;
     [SerializeField] private TextMeshProUGUI playerCountText;
+    
 
     private LobbyManager LobbyManager;
 

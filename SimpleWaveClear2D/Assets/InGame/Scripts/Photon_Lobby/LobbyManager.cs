@@ -37,7 +37,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Header("Visual")]
     [SerializeField] private List<GameObject> landerList = new();
 
+    PhotonView pv;
 
+
+    private void Awake()
+    {
+        pv = GetComponent<PhotonView>();
+    }
 
     private void Start()
     {
@@ -50,6 +56,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             startButton.SetActive(true);
+            
+        }
+        else
+        {
+            startButton.SetActive(false);
+            
         }
     }
     // ===============================
@@ -173,7 +185,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         foreach (var player in PhotonNetwork.PlayerList)
         {           
                 var newPlayer = Instantiate(playerListItemPrefab, playerContent);
-                newPlayer.SetPlayerName(player.NickName);
+                newPlayer.SetPlayerInfo(player);
                 playerListItems.Add(newPlayer);        
         }
 
