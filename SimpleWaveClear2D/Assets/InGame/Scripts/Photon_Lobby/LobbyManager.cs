@@ -34,6 +34,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [Header("MasterClient-SetActive")]
     [SerializeField] private GameObject startButton;
 
+    [Header("Visual")]
+    [SerializeField] private List<GameObject> landerList = new();
+
+
 
     private void Start()
     {
@@ -68,7 +72,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (roomNameField.text.Length >= 1)
         {
-            PhotonNetwork.CreateRoom(roomNameField.text);
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.MaxPlayers = 4;
+            PhotonNetwork.CreateRoom(roomNameField.text, roomOptions);
         }
     }
 
@@ -144,7 +150,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             if (room.IsOpen && room.PlayerCount > 0)
             {
                 RoomListItem newRoom = Instantiate(roomListItemPrefab, content);
-                newRoom.SetRoomName(room.Name);
+                
+                newRoom.SetRoomName(room.Name,room.PlayerCount.ToString() + "/4");
                 roomItemList.Add(newRoom);
             }
             else
@@ -170,5 +177,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 playerListItems.Add(newPlayer);        
         }
 
+        foreach (GameObject playerInfo in landerList)
+        {
+            playerInfo.SetActive(false);
+        }
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            landerList[i].SetActive(true);
+        }
     }
 }
