@@ -27,6 +27,7 @@ public class PlayerCollide : MonoBehaviour
 
         if (((1 << layer) & wrongGround) != 0)
         {
+            pv.RPC("RPC_PlayerCrashed", RpcTarget.All, pv.Owner.NickName);
             Crash();
         }
     }
@@ -63,7 +64,11 @@ public class PlayerCollide : MonoBehaviour
             SwitchCameraToAlivePlayer();
         });
     }
-
+    [PunRPC]
+    void RPC_PlayerCrashed(string playerName)
+    {
+        FeedBackMessage.Instance.ShowMessage(playerName + "<color=red> Is Crashed</color>");
+    }
     private void SwitchCameraToAlivePlayer()
     {
         // Sadece kendi client'�m�z i�in yap�yoruz

@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using Photon.Realtime;
 using System;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -36,6 +37,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     [Header("Visual")]
     [SerializeField] private List<GameObject> landerList = new();
+    [SerializeField] private GameObject staticLander;
 
     PhotonView pv;
 
@@ -48,7 +50,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         PhotonNetwork.JoinLobby();
-
+        staticLander.GetComponentInChildren<TextMeshPro>().text = PhotonNetwork.NickName;
     }
 
     private void Update()
@@ -115,7 +117,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         roomPanel.SetActive(true);
         lobbyPanel.SetActive(false);
-
+        
+        
+            staticLander.gameObject.SetActive(false);
+        
+        
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         UpdatePlayerList();
     }
@@ -124,6 +130,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         roomPanel.SetActive(false);
         lobbyPanel.SetActive(true);
+        staticLander.gameObject.SetActive(true);
+
         UpdatePlayerList();
     }
 
@@ -176,6 +184,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void UpdatePlayerList()
     {
+        /*
         foreach (PlayerListItem playerInfo in playerListItems)
         {
             Destroy(playerInfo.gameObject);
@@ -188,15 +197,54 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 newPlayer.SetPlayerInfo(player);
                 playerListItems.Add(newPlayer);        
         }
+        */
 
+        // Önce tüm lander objelerini kapat
         foreach (GameObject playerInfo in landerList)
         {
             playerInfo.SetActive(false);
         }
 
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        var players = PhotonNetwork.PlayerList;
+
+        // Mevcut oyuncular için lander slotlarını ayarla
+        for (int i = 0; i < Mathf.Min(players.Length, landerList.Count); i++)
         {
-            landerList[i].SetActive(true);
+            GameObject lander = landerList[i];
+            lander.SetActive(true);
+
+            // İsmi yaz
+            var tmp = lander.GetComponentInChildren<TextMeshPro>();
+            if (tmp != null)
+                tmp.text = players[i].NickName;
+
+            // Master client tacını aç/kapat
+            var crown = lander.transform.Find("MasterClientCrown");
+            if (crown != null)
+            {
+                bool _isMaster = players[i] != null && players[i] == PhotonNetwork.MasterClient;
+                crown.gameObject.SetActive(_isMaster);
+            }
         }
+
+        // Kalan lander slotlarını temizle
+        for (int i = players.Length; i < landerList.Count; i++)
+        {
+            GameObject lander = landerList[i];
+
+            var tmp = lander.GetComponentInChildren<TextMeshPro>();
+            if (tmp != null)
+                tmp.text = "";
+
+            var crown = lander.transform.Find("MasterClientCrown");
+            if (crown != null)
+                crown.gameObject.SetActive(false);
+
+            lander.SetActive(false);
+        }
+
+
+
+
     }
 }
